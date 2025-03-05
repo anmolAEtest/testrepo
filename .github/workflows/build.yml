@@ -1,19 +1,29 @@
-name: Build
+name: SonarCloud Analysis
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches:
+      - "*"
+
 jobs:
-  sonarqube:
-    name: SonarQube
-    runs-on: windows-latest
+  build:
+    name: Build and Analyze on SonarCloud
+    runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
