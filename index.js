@@ -7,6 +7,7 @@ app.get('/', (req, res) => {
   
   // Safe way to parse input instead of eval
   const result = Number(userInput) + 2; 
+  let ans=2;
   
   res.send(`Result is: ${result}`);
 });
